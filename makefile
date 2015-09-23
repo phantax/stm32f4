@@ -72,13 +72,25 @@ FLAGS   += -mcpu=cortex-m4
 
 CFLAGS   = $(FLAGS)
 CFLAGS  += -c
-CFLAGS  += -g
+CFLAGS  += -g3
 CFLAGS  += -O0 
 CFLAGS  += -std=gnu99
-CFLAGS  += -fdata-sections -fno-common -ffunction-sections -funroll-loops
-CFLAGS  += -Wall -Wshadow -Wdeclaration-after-statement -Wcast-align 
-CFLAGS  += -Wbad-function-cast -Wbad-function-cast -Wstrict-prototypes 
-CFLAGS  += -Wmissing-prototypes -Wsign-compare -Wno-unused-parameter
+
+CFLAGS  += -fdata-sections
+CFLAGS  += -fno-common
+CFLAGS  += -ffunction-sections
+CFLAGS  += -funroll-loops
+
+CFLAGS  += -Wall
+CFLAGS  += -Wshadow
+CFLAGS  += -Wdeclaration-after-statement
+CFLAGS  += -Wcast-align 
+CFLAGS  += -Wbad-function-cast
+CFLAGS  += -Wstrict-prototypes 
+CFLAGS  += -Wmissing-prototypes
+CFLAGS  += -Wsign-compare
+CFLAGS  += -Wno-unused-parameter
+
 CFLAGS  += $(foreach d, $(INC_DIRS), -I$d)
 CFLAGS  += $(foreach d, $(MACROS), -D$d)
 
