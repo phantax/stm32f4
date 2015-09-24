@@ -25,7 +25,6 @@ SRC_FILES += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/
 # _____________________________________________________________________________
 
 INC_DIRS   = ./inc
-INC_DIRS  += ./system/include
 
 INC_DIRS  += $(CUBE_DIR)/Drivers/BSP/STM32F4-Discovery
 INC_DIRS  += $(CUBE_DIR)/Drivers/CMSIS/Include
