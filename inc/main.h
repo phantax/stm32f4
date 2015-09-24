@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    stm32f4xx_hal_pcd_ex.h
+  * @file    Templates/Inc/main.h 
   * @author  MCD Application Team
-  * @version V1.2.0
-  * @date    26-December-2014
-  * @brief   Header file of PCD HAL module.
+  * @version V1.2.1
+  * @date    13-March-2015
+  * @brief   Header for main.c module
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -33,59 +33,20 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-  */ 
-
+  */
+  
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_HAL_PCD_EX_H
-#define __STM32F4xx_HAL_PCD_EX_H
-
-#ifdef __cplusplus
- extern "C" {
-#endif
+#ifndef __MAIN_H
+#define __MAIN_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal_def.h"
-   
-/** @addtogroup STM32F4xx_HAL_Driver
-  * @{
-  */
+#include "stm32f4xx_hal.h"
 
-/** @addtogroup PCDEx
-  * @{
-  */
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-/* Exported macros -----------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/
-/** @addtogroup PCDEx_Exported_Functions PCDEx Exported Functions
-  * @{
-  */
-/** @addtogroup PCDEx_Exported_Functions_Group1 Peripheral Control functions
-  * @{
-  */
-HAL_StatusTypeDef HAL_PCDEx_SetTxFiFo(PCD_HandleTypeDef *hpcd, uint8_t fifo, uint16_t size);
-HAL_StatusTypeDef HAL_PCDEx_SetRxFiFo(PCD_HandleTypeDef *hpcd, uint16_t size);
-/**
-  * @}
-  */ 
+/* Exported macro ------------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
 
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */
-
-#ifdef __cplusplus
-}
-#endif
-
-
-#endif /* __STM32F4xx_HAL_PCD_EX_H */
+#endif /* __MAIN_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -1,16 +1,16 @@
 /**
   ******************************************************************************
-  * @file    SPI/SPI_FullDuplex_ComIT/Src/stm32f4xx_it.c 
+  * @file    Templates/Src/stm32f4xx_it.c 
   * @author  MCD Application Team
-  * @version V1.2.0
-  * @date    26-December-2014
+  * @version V1.2.1
+  * @date    13-March-2015
   * @brief   Main Interrupt Service Routines.
   *          This file provides template for all exceptions handler and 
   *          peripherals interrupt service routine.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -37,59 +37,60 @@
   ******************************************************************************
   */
 
-/*============================================================================*/
-/*                                INCLUDES                                    */
-/*============================================================================*/
-#include "tls_main.h"
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
 #include "stm32f4xx_it.h"
 
-/*============================================================================*/
-/*                                DEFINES                                   */
-/*============================================================================*/
-// Define TRUE and FALSE if they have not already been defined
-#ifndef FALSE
-#define FALSE (0)
-#endif
-#ifndef TRUE
-#define TRUE (!FALSE)
-#endif
+/** @addtogroup STM32F4xx_HAL_Examples
+  * @{
+  */
 
-/* SPI handler declared in "tls_main.c" file */
-extern SPI_HandleTypeDef SpiHandle;
+/** @addtogroup Templates
+  * @{
+  */
 
-/* UART handler */
-extern UART_HandleTypeDef UartHandle_DBG , UartHandle_PERF;
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
 
-/* Timer handler */
-extern TIM_HandleTypeDef TimeHandle;
-
-static int head, tail;
+/* Private function prototypes -----------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
 
 
-/* Function handling NMI exception */
+extern UART_HandleTypeDef UartHandle_DBG;
+
+/******************************************************************************/
+/*            Cortex-M4 Processor Exceptions Handlers                         */
+/******************************************************************************/
+
+/**
+  * @brief   This function handles NMI exception.
+  * @param  None
+  * @retval None
+  */
 void NMI_Handler(void)
 {
 }
 
-void printErrorMsg(const char *errMsg)
-{
-	while(*errMsg != '\0')
-	{
-		ITM_SendChar(*errMsg);
-		++errMsg;
-	}
-}
-
-/* Function handling Hard Fault exception */
+/**
+  * @brief  This function handles Hard Fault exception.
+  * @param  None
+  * @retval None
+  */
 void HardFault_Handler(void)
 {
   /* Go to infinite loop when Hard Fault exception occurs */
-	while (1)
+  while (1)
   {
   }
 }
 
-/* Function handling Memory Manage exception */
+/**
+  * @brief  This function handles Memory Manage exception.
+  * @param  None
+  * @retval None
+  */
 void MemManage_Handler(void)
 {
   /* Go to infinite loop when Memory Manage exception occurs */
@@ -98,7 +99,11 @@ void MemManage_Handler(void)
   }
 }
 
-/* Function handling Bus Fault exception */
+/**
+  * @brief  This function handles Bus Fault exception.
+  * @param  None
+  * @retval None
+  */
 void BusFault_Handler(void)
 {
   /* Go to infinite loop when Bus Fault exception occurs */
@@ -107,7 +112,11 @@ void BusFault_Handler(void)
   }
 }
 
-/* Function handling Usage Fault exception */
+/**
+  * @brief  This function handles Usage Fault exception.
+  * @param  None
+  * @retval None
+  */
 void UsageFault_Handler(void)
 {
   /* Go to infinite loop when Usage Fault exception occurs */
@@ -116,22 +125,38 @@ void UsageFault_Handler(void)
   }
 }
 
-/* Function handling SVCall exception */
+/**
+  * @brief  This function handles SVCall exception.
+  * @param  None
+  * @retval None
+  */
 void SVC_Handler(void)
 {
 }
 
-/* Function handling Debug Monitor exception */
+/**
+  * @brief  This function handles Debug Monitor exception.
+  * @param  None
+  * @retval None
+  */
 void DebugMon_Handler(void)
 {
 }
 
-/* Function handling PendSVC exception */
+/**
+  * @brief  This function handles PendSVC exception.
+  * @param  None
+  * @retval None
+  */
 void PendSV_Handler(void)
 {
 }
 
-/* Function handling SysTick Handler */
+/**
+  * @brief  This function handles SysTick Handler.
+  * @param  None
+  * @retval None
+  */
 void SysTick_Handler(void)
 {
   HAL_IncTick();
@@ -143,3 +168,29 @@ void SysTick_Handler(void)
 /*  available peripheral interrupt handler's name please refer to the startup */
 /*  file (startup_stm32f4xx.s).                                               */
 /******************************************************************************/
+
+void USART2_IRQHandler(void) {
+
+	HAL_UART_IRQHandler(&UartHandle_DBG);
+}
+
+
+/**
+  * @brief  This function handles PPP interrupt request.
+  * @param  None
+  * @retval None
+  */
+/*void PPP_IRQHandler(void)
+{
+}*/
+
+
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

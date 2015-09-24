@@ -4,15 +4,23 @@
 PROJ_NAME  = stm32
 
 
-# The list of source files (wildcars may be used, but NO REVERSE PATHS)
+# Path to the STM32F4Cube package 
+# _____________________________________________________________________________
+
+CUBE_DIR   = /home/walz/Code/STM32CubeF4/STM32Cube_FW_F4_V1.8.0
+
+
+# The list of source files (wildcards may be used, but NO REVERSE PATHS)
 # _____________________________________________________________________________
 
 SRC_FILES  = ./src/*.c
-SRC_FILES += ./system/src/cmsis/*.c
-SRC_FILES += ./system/src/stm32f4-hal/*.c
-SRC_FILES += ./system/src/newlib/*.c
-SRC_FILES += ./system/src/cortexm/*.c
+SRC_FILES += ./system/src/newlib/_sbrk.c
+SRC_FILES += ./system/src/newlib/_syscalls.c
 SRC_FILES += ./system/src/diag/*.c
+
+SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/*.c
+SRC_FILES += $(CUBE_DIR)/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.c
+SRC_FILES += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f407xx.s
 
 
 # The list of include directories
@@ -20,8 +28,11 @@ SRC_FILES += ./system/src/diag/*.c
 
 INC_DIRS   = ./inc
 INC_DIRS  += ./system/include
-INC_DIRS  += ./system/include/cmsis
-INC_DIRS  += ./system/include/stm32f4-hal
+
+INC_DIRS  += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Inc
+INC_DIRS  += $(CUBE_DIR)/Drivers/BSP/STM32F4-Discovery
+INC_DIRS  += $(CUBE_DIR)/Drivers/CMSIS/Include
+INC_DIRS  += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 
 
 # Preprocessor macro defines
@@ -31,7 +42,6 @@ MACROS   = STM32F407xx
 MACROS  += printf=iprintf
 MACROS  += USE_FULL_ASSERT
 MACROS  += USE_HAL_DRIVER
-MACROS  += TRACE
 
 
 # Compiler prefix
@@ -43,9 +53,8 @@ C_PREFIX = arm-none-eabi-
 # The linker script
 # _____________________________________________________________________________
 
-LD_SCRIPTS  = linker/mem.ld
-LD_SCRIPTS += linker/libs.ld
-LD_SCRIPTS += linker/sections.ld
+LD_SCRIPTS  = $(CUBE_DIR)/Projects/STM32F4-Discovery/Templates/SW4STM32/STM32F4-Discovery/STM32F407VGTx_FLASH.ld
+LD_SCRIPTS += linker/heapstack.ld
 
 
 # =============================================================================
@@ -77,8 +86,8 @@ CFLAGS  += -O0
 CFLAGS  += -std=gnu99
 
 CFLAGS  += -fdata-sections
-CFLAGS  += -fno-common
 CFLAGS  += -ffunction-sections
+CFLAGS  += -fno-common
 CFLAGS  += -funroll-loops
 
 CFLAGS  += -Wall
@@ -99,7 +108,7 @@ CFLAGS  += $(foreach d, $(MACROS), -D$d)
 LDFLAGS  = $(FLAGS)
 LDFLAGS += $(foreach d, $(LD_SCRIPTS), -T$d)
 #LDFLAGS += --specs=nosys.specs
-LDFLAGS += -nostartfiles
+#LDFLAGS += -nostartfiles
 LDFLAGS += -Wl,-Map=$(BUILD_DIR)/$(PROJ_NAME).map
 LDFLAGS += -Xlinker --gc-sections
 
