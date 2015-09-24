@@ -14,9 +14,7 @@ CUBE_DIR   = /home/walz/Code/STM32CubeF4/STM32Cube_FW_F4_V1.8.0
 # _____________________________________________________________________________
 
 SRC_FILES  = ./src/*.c
-SRC_FILES += ./system/src/newlib/_sbrk.c
-SRC_FILES += ./system/src/newlib/_syscalls.c
-SRC_FILES += ./system/src/diag/*.c
+SRC_FILES += ./system/src/newlib/*.c
 
 SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/*.c
 SRC_FILES += $(CUBE_DIR)/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.c
@@ -29,10 +27,10 @@ SRC_FILES += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/
 INC_DIRS   = ./inc
 INC_DIRS  += ./system/include
 
-INC_DIRS  += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Inc
 INC_DIRS  += $(CUBE_DIR)/Drivers/BSP/STM32F4-Discovery
 INC_DIRS  += $(CUBE_DIR)/Drivers/CMSIS/Include
 INC_DIRS  += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+INC_DIRS  += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Inc
 
 
 # Preprocessor macro defines
