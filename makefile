@@ -105,7 +105,9 @@ CFLAGS  += $(foreach d, $(MACROS), -D$d)
 LDFLAGS  = $(FLAGS)
 LDFLAGS += $(foreach d, $(LD_SCRIPTS), -T$d)
 #LDFLAGS += --specs=nosys.specs
+LDFLAGS += -nodefaultlibs
 #LDFLAGS += -nostartfiles
+#LDFLAGS += -nostdlib
 LDFLAGS += -Wl,-Map=$(BUILD_DIR)/$(PROJ_NAME).map
 LDFLAGS += -Xlinker --gc-sections
 
