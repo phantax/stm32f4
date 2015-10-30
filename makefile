@@ -13,7 +13,7 @@ CUBE_DIR   = /home/walz/Code/STM32CubeF4/STM32Cube_FW_F4_V1.8.0
 # The list of source files (wildcards may be used, but NO REVERSE PATHS)
 # _____________________________________________________________________________
 
-SRC_FILES  = ./src/*.c
+SRC_FILES  = ./src/*.c*
 SRC_FILES += ./system/src/newlib/*.c
 
 SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/*.c
@@ -61,6 +61,7 @@ BUILD_DIR  = build
 # _____________________________________________________________________________
 
 CC       = $(C_PREFIX)gcc
+CXX      = $(C_PREFIX)g++
 OBJCOPY  = $(C_PREFIX)objcopy
 OBJDUMP  = $(C_PREFIX)objdump
 SIZE	 = $(C_PREFIX)size
@@ -88,6 +89,18 @@ CFLAGS  += -fno-common
 CFLAGS  += -funroll-loops
 
 CFLAGS  += -Wall
+
+CFLAGS  += $(foreach d, $(INC_DIRS), -I$d)
+CFLAGS  += $(foreach d, $(MACROS), -D$d)
+
+# _____________________________________________________________________________
+
+CXXFLAGS  = $(CFLAGS)
+CXXFLAGS += -std=c++11
+CXXFLAGS += -fno-exceptions
+
+# _____________________________________________________________________________
+
 CFLAGS  += -Wshadow
 CFLAGS  += -Wdeclaration-after-statement
 CFLAGS  += -Wcast-align 
@@ -96,9 +109,6 @@ CFLAGS  += -Wstrict-prototypes
 CFLAGS  += -Wmissing-prototypes
 CFLAGS  += -Wsign-compare
 CFLAGS  += -Wno-unused-parameter
-
-CFLAGS  += $(foreach d, $(INC_DIRS), -I$d)
-CFLAGS  += $(foreach d, $(MACROS), -D$d)
 
 # _____________________________________________________________________________
 
@@ -159,10 +169,22 @@ size : $(EXECUTABLE)
 	@echo "\033[01;33m==> Printing size for '$(EXECUTABLE)':\033[00;00m"
 	$(SIZE) --format=berkley $(EXECUTABLE)
 	
-$(OBJ_BASE_DIR)/%.o: %
-	@echo "\033[01;32m==> Compiling '$<' -> '$@':\033[00;00m"
+$(OBJ_BASE_DIR)/%.c.o: %.c
+	@echo "\033[01;32m==> Compiling C '$<' -> '$@':\033[00;00m"
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $< -o $@
+	@echo ""
+	
+$(OBJ_BASE_DIR)/%.s.o: %.s
+	@echo "\033[01;32m==> Compiling assembler '$<' -> '$@':\033[00;00m"
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $< -o $@
+	@echo ""
+	
+$(OBJ_BASE_DIR)/%.cpp.o: %.cpp
+	@echo "\033[01;32m==> Compiling C++ '$<' -> '$@':\033[00;00m"
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) $< -o $@
 	@echo ""
 	
 $(PREP_BASE_DIR)/%: %
