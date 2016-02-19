@@ -51,7 +51,31 @@ UART_HandleTypeDef UartHandle_DBG;
 #define  USART2_RX_AF 			GPIO_AF7_USART2
 
 
+class FIFO {
+
+private:
+
+    uint8_t* pHead;
+    uint8_t* pTail;
+
+public:
+
+    inline void put(uint8_t c) {
+        *pHead = c;
+        pHead++;
+    }
+
+    inline uint8_t get() {
+        uint8_t c = *pTail;
+        pTail++;
+        return c;
+    }
+};
+
+
+
 int main(void) {
+
 
 	HAL_Init();
 
@@ -102,6 +126,15 @@ int main(void) {
 	}
 
 	printf("\n\rHello World!\n");
+
+    FIFO fifo;
+    fifo.put(3);
+
+    struct {
+        uint8_t* p;
+    } *T;
+    *T->p = 3;
+    T->p++;
 
 	while (1) {
 		HAL_Delay(1000);
