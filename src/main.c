@@ -38,8 +38,16 @@
 #include "main.h"
 #include "stm32f4_discovery.h"
 
+#include "timestamp_base64.h"
+
 static void SystemClock_Config(void);
 static void Error_Handler(void);
+uint32_t timestamp_get_ticks(void);
+void timestamp_send_byte(uint8_t byte);
+
+
+/* Definitions of Timer handler */
+TIM_HandleTypeDef TimeHandle;
 
 UART_HandleTypeDef UartHandle_DBG;
 
@@ -51,26 +59,19 @@ UART_HandleTypeDef UartHandle_DBG;
 #define  USART2_RX_AF 			GPIO_AF7_USART2
 
 
-class FIFO {
 
-private:
+void timestamp_send_byte(uint8_t byte) {
 
-    uint8_t* pHead;
-    uint8_t* pTail;
+	while ((HAL_UART_Transmit_IT(&UartHandle_DBG, (uint8_t *)&byte, 1)) != HAL_OK);
+	return 0;
+}
 
-public:
 
-    inline void put(uint8_t c) {
-        *pHead = c;
-        pHead++;
-    }
 
-    inline uint8_t get() {
-        uint8_t c = *pTail;
-        pTail++;
-        return c;
-    }
-};
+uint32_t timestamp_get_ticks(void) {
+
+    return __HAL_TIM_GetCounter(&TimeHandle);
+}
 
 
 
@@ -125,21 +126,51 @@ int main(void) {
 		Error_Handler();
 	}
 
+
+
+	/* Set timer parameters for performance measurements */
+//	uint32_t timer_prescalerValue	= (uint32_t)((SystemCoreClock / 2) / 100000) - 1;
+	uint32_t timer_prescalerValue	= 0;
+	TimeHandle.Instance             = TIM2;
+	TimeHandle.Init.Period			= 0xFFFFFFFF;
+	TimeHandle.Init.Prescaler		= timer_prescalerValue;
+	TimeHandle.Init.ClockDivision	= TIM_CLOCKDIVISION_DIV1;
+	TimeHandle.Init.CounterMode		= TIM_COUNTERMODE_UP;
+	TimeHandle.Channel 				= HAL_TIM_ACTIVE_CHANNEL_1;
+
+	__HAL_RCC_TIM2_CLK_ENABLE();
+
+	/* initialise the Timer parameters */
+	if (HAL_TIM_Base_Init(&TimeHandle) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+	/* start the Time Base generation */
+	if (HAL_TIM_Base_Start(&TimeHandle) != HAL_OK)
+	{
+		/* starting timer error */
+		Error_Handler();
+	}
+
+
 	printf("\n\rHello World!\n");
 
-    FIFO fifo;
-    fifo.put(3);
+ 	while (1) {
 
-    struct {
-        uint8_t* p;
-    } *T;
-    *T->p = 3;
-    T->p++;
+		timestamp_set(0x0000);
 
-	while (1) {
 		HAL_Delay(1000);
+
+		timestamp_set(0x0001);
+
 		printf("TICK\n");
 		BSP_LED_Toggle(LED6);
+
+		timestamp_set(0x0002);
+		timestamp_set(0x0003);
+
+		timestamp_flush();
 	}
 }
 

@@ -16,6 +16,8 @@ CUBE_DIR   = /home/walz/Code/STM32CubeF4/STM32Cube_FW_F4_V1.8.0
 SRC_FILES  = ./src/*.c*
 SRC_FILES += ./system/src/newlib/*.c
 
+SRC_FILES += /home/walz/Code/micro-man-tools/timestamps/timestamp_base64.c
+
 SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/*.c
 SRC_FILES += $(CUBE_DIR)/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.c
 SRC_FILES += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f407xx.s
@@ -25,6 +27,8 @@ SRC_FILES += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/
 # _____________________________________________________________________________
 
 INC_DIRS   = ./inc
+
+INC_DIRS  += /home/walz/Code/micro-man-tools/timestamps
 
 INC_DIRS  += $(CUBE_DIR)/Drivers/BSP/STM32F4-Discovery
 INC_DIRS  += $(CUBE_DIR)/Drivers/CMSIS/Include
