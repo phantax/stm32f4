@@ -38,12 +38,13 @@
 #include "main.h"
 #include "stm32f4_discovery.h"
 
-#include "timestamp_base64.h"
+#include "microtags.h"
 
 static void SystemClock_Config(void);
 static void Error_Handler(void);
-uint32_t timestamp_get_ticks(void);
-void timestamp_send_byte(uint8_t byte);
+
+uint32_t microtags_get_ticks(void);
+void microtags_send_byte(uint8_t byte);
 
 
 /* Definitions of Timer handler */
@@ -60,15 +61,14 @@ UART_HandleTypeDef UartHandle_DBG;
 
 
 
-void timestamp_send_byte(uint8_t byte) {
+void microtags_send_byte(uint8_t byte) {
 
 	while ((HAL_UART_Transmit_IT(&UartHandle_DBG, (uint8_t *)&byte, 1)) != HAL_OK);
-	return 0;
 }
 
 
 
-uint32_t timestamp_get_ticks(void) {
+uint32_t microtags_get_ticks(void) {
 
     return __HAL_TIM_GetCounter(&TimeHandle);
 }
@@ -158,19 +158,21 @@ int main(void) {
 
  	while (1) {
 
-		timestamp_set(0x0000);
+		microtags_set_ticks(0x0000);
 
 		HAL_Delay(1000);
 
-		timestamp_set(0x0001);
+		microtags_set_ticks(0x0001);
 
 		printf("TICK\n");
 		BSP_LED_Toggle(LED6);
 
-		timestamp_set(0x0002);
-		timestamp_set(0x0003);
+		microtags_set_ticks(0x0002);
+		microtags_set_ticks(0x0003);
 
-		timestamp_flush();
+		microtags_set_data(0x0004, 0x01234567);
+
+		microtags_flush_text(microtags_send_byte);
 	}
 }
 
