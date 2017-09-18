@@ -7,7 +7,13 @@ PROJ_NAME  = stm32
 # Path to the STM32F4Cube package 
 # _____________________________________________________________________________
 
-CUBE_DIR   = /home/walz/Code/STM32CubeF4/STM32Cube_FW_F4_V1.8.0
+CUBE_DIR   = /home/awalz/Code/STM32Cube_FW_F4_V1.16.0
+
+
+# Compiler prefix
+# _____________________________________________________________________________
+
+C_PREFIX = /opt/gcc-arm-none-eabi-6-2017-q2-update/bin/arm-none-eabi-
 
 
 # The list of source files (wildcards may be used, but NO REVERSE PATHS)
@@ -16,11 +22,18 @@ CUBE_DIR   = /home/walz/Code/STM32CubeF4/STM32Cube_FW_F4_V1.8.0
 SRC_FILES  = ./src/*.c*
 SRC_FILES += ./system/src/newlib/*.c
 
-SRC_FILES += /home/walz/Code/micro-man-tools/microtags/microtags.c
+SRC_FILES += /home/awalz/Code/microtags/microtags.c
 
-SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/*.c
+SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
+SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
+SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
+SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
+SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c
+SRC_FILES += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
 SRC_FILES += $(CUBE_DIR)/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.c
+SRC_FILES += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
 SRC_FILES += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f407xx.s
+SRC_FILES += $(CUBE_DIR)/Projects/STM32F4-Discovery/Templates/Src/stm32f4xx_it.c
 
 
 # The list of include directories
@@ -28,12 +41,13 @@ SRC_FILES += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/
 
 INC_DIRS   = ./inc
 
-INC_DIRS  += /home/walz/Code/micro-man-tools/microtags
+INC_DIRS  += /home/awalz/Code/microtags
 
 INC_DIRS  += $(CUBE_DIR)/Drivers/BSP/STM32F4-Discovery
 INC_DIRS  += $(CUBE_DIR)/Drivers/CMSIS/Include
 INC_DIRS  += $(CUBE_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 INC_DIRS  += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Inc
+INC_DIRS  += $(CUBE_DIR)/Projects/STM32F4-Discovery/Templates/Inc
 
 
 # Preprocessor macro defines
@@ -41,14 +55,7 @@ INC_DIRS  += $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver/Inc
 
 MACROS   = STM32F407xx
 MACROS  += printf=iprintf
-MACROS  += USE_FULL_ASSERT
 MACROS  += USE_HAL_DRIVER
-
-
-# Compiler prefix
-# _____________________________________________________________________________
-
-C_PREFIX = arm-none-eabi-
 
 
 # The linker script

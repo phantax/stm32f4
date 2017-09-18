@@ -44,6 +44,7 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 
 uint32_t microtags_get_ticks(void);
+
 void microtags_send_byte(uint8_t byte);
 
 
@@ -158,19 +159,19 @@ int main(void) {
 
  	while (1) {
 
-		microtags_set_ticks(0x0000);
+		microtags_set_with_ticks(0x0000);
 
 		HAL_Delay(1000);
 
-		microtags_set_ticks(0x0001);
+		microtags_set_with_ticks(0x0001);
 
 		printf("TICK\n");
 		BSP_LED_Toggle(LED6);
 
-		microtags_set_ticks(0x0002);
-		microtags_set_ticks(0x0003);
+		microtags_set_with_ticks(0x0002);
+		microtags_set_with_ticks(0x0003);
 
-		microtags_set_data(0x0004, 0x01234567);
+		microtags_set_with_data(0x0004, 0x01234567);
 
 		microtags_flush_text(microtags_send_byte);
 	}
