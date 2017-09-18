@@ -35,52 +35,32 @@
  ******************************************************************************
  */
 
-#include "stm32f4xx_hal.h"
-#include "stm32f4_discovery.h"
-#include "system.h"
-#include "microtags.h"
+/* TODO: Add description */
+extern TIM_HandleTypeDef TimeHandle;
 
 
-
-void microtags_send_byte(uint8_t byte) {
-
-	while ((HAL_UART_Transmit_IT(&UartHandle_DBG, (uint8_t *)&byte, 1)) != HAL_OK);
-}
+/* TODO: Add description */
+extern UART_HandleTypeDef UartHandle_DBG;
 
 
-
-uint32_t microtags_get_ticks(void) {
-
-    return __HAL_TIM_GetCounter(&TimeHandle);
-}
+/* TODO: Add description */
+int _write(int file, char* buf, int len);
 
 
+/* TODO: Add description */
+static int uart_putchar(char c);
 
-int main(void) {
 
-    system_init();
+/* TODO: Add description */
+static void SystemClock_Config(void);
 
-	printf("\n\rHello World!\n");
 
- 	while (1) {
+/* TODO: Add description */
+static void Error_Handler(void);
 
-		microtags_set_with_ticks(0x0000);
 
-		HAL_Delay(1000);
-
-		microtags_set_with_ticks(0x0001);
-
-		printf("TICK\n");
-		BSP_LED_Toggle(LED6);
-
-		microtags_set_with_ticks(0x0002);
-		microtags_set_with_ticks(0x0003);
-
-		microtags_set_with_data(0x0004, 0x01234567);
-
-		microtags_flush_text(microtags_send_byte);
-	}
-}
+/* TODO: Add description */
+int system_init(void);
 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
