@@ -7,7 +7,8 @@ PROJ_NAME  = stm32
 # Path to the STM32F4Cube package 
 # _____________________________________________________________________________
 
-CUBE_DIR   = /home/awalz/Code/STM32Cube_FW_F4_V1.16.0
+#CUBE_DIR   = /home/awalz/Code/STM32Cube_FW_F4_V1.16.0
+CUBE_DIR   = /home/awalz/Code/STM32CubeF4/STM32Cube_FW_F4_V1.8.0
 
 
 # Compiler prefix

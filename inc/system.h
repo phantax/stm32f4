@@ -52,6 +52,10 @@ static int uart_putchar(char c);
 
 
 /* TODO: Add description */
+static void system_init_uart_debug();
+
+
+/* TODO: Add description */
 static void SystemClock_Config(void);
 
 

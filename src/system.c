@@ -45,13 +45,6 @@ TIM_HandleTypeDef TimeHandle;
 /* TODO: Add description */
 UART_HandleTypeDef UartHandle_DBG;
 
-#define  USART2_TX_PIN      	GPIO_PIN_2
-#define  USART2_TX_GPIO_PORT	GPIOA
-#define  USART2_TX_AF			GPIO_AF7_USART2
-#define  USART2_RX_PIN			GPIO_PIN_3
-#define  USART2_RX_GPIO_PORT 	GPIOA
-#define  USART2_RX_AF 			GPIO_AF7_USART2
-
 
 /*
  * TODO: Add description
@@ -60,6 +53,46 @@ static int uart_putchar(char c) {
 
 	while ((HAL_UART_Transmit_IT(&UartHandle_DBG, (uint8_t *)&c, 1)) != HAL_OK);
 	return 0;
+}
+
+
+/*
+ *	TODO: Add description
+ */
+static void system_init_uart_debug() {
+
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_USART2_CLK_ENABLE();
+
+	UartHandle_DBG.Instance                  = USART2;
+	UartHandle_DBG.Init.BaudRate             = 115200;
+	UartHandle_DBG.Init.WordLength           = UART_WORDLENGTH_8B;
+	UartHandle_DBG.Init.StopBits             = UART_STOPBITS_1;
+	UartHandle_DBG.Init.Parity               = UART_PARITY_NONE;
+	UartHandle_DBG.Init.HwFlowCtl            = UART_HWCONTROL_NONE;
+	UartHandle_DBG.Init.Mode                 = UART_MODE_TX_RX;
+	UartHandle_DBG.Init.OverSampling        = UART_OVERSAMPLING_16;
+
+	GPIO_InitTypeDef GPIO_InitStruct;
+	GPIO_InitStruct.Pin       = GPIO_PIN_2;
+	GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Pull      = GPIO_NOPULL;
+	GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
+	GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = GPIO_PIN_3;
+	GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);
+	HAL_NVIC_EnableIRQ(USART2_IRQn);
+
+	if (HAL_UART_Init(&UartHandle_DBG) != HAL_OK) {
+		Error_Handler();
+	}
 }
 
 
@@ -88,6 +121,8 @@ int system_init(void) {
 
 	SystemClock_Config();
 
+	system_init_uart_debug();
+
 	BSP_LED_Init(LED3);
 	BSP_LED_Init(LED4);
 	BSP_LED_Init(LED5);
@@ -97,39 +132,6 @@ int system_init(void) {
 	BSP_LED_Off(LED4);
 	BSP_LED_Off(LED5);
 	BSP_LED_Off(LED6);
-
-	UartHandle_DBG.Instance          	= USART2;
-	UartHandle_DBG.Init.BaudRate     	= 115200;
-	UartHandle_DBG.Init.WordLength   	= UART_WORDLENGTH_8B;
-	UartHandle_DBG.Init.StopBits     	= UART_STOPBITS_1;
-	UartHandle_DBG.Init.Parity       	= UART_PARITY_NONE;
-	UartHandle_DBG.Init.HwFlowCtl    	= UART_HWCONTROL_NONE;
-	UartHandle_DBG.Init.Mode         	= UART_MODE_TX_RX;
-	UartHandle_DBG.Init.OverSampling	= UART_OVERSAMPLING_16;
-
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-	__HAL_RCC_USART2_CLK_ENABLE();
-
-	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.Pin       = USART2_TX_PIN;
-	GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull      = GPIO_NOPULL;
-	GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
-	GPIO_InitStruct.Alternate = USART2_RX_AF;
-
-	HAL_GPIO_Init(USART2_TX_GPIO_PORT, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = USART2_RX_PIN;
-	GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
-
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-	HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);
-	HAL_NVIC_EnableIRQ(USART2_IRQn);
-
-	if (HAL_UART_Init(&UartHandle_DBG) != HAL_OK) {
-		Error_Handler();
-	}
 
 
 //	uint32_t timer_prescalerValue	= (uint32_t)((SystemCoreClock / 2) / 100000) - 1;
@@ -152,7 +154,6 @@ int system_init(void) {
 		Error_Handler();
 	}
 }
-
 
 
 /**
@@ -222,6 +223,12 @@ static void SystemClock_Config(void)
 		/* Enable the Flash prefetch */
 		__HAL_FLASH_PREFETCH_BUFFER_ENABLE();
 	}
+}
+
+
+void USART2_IRQHandler(void) {
+
+	HAL_UART_IRQHandler(&UartHandle_DBG);
 }
 
 
